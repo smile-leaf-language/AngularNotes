@@ -1,0 +1,78 @@
+<!--
+    config
+        作用：为定义的模版对象注入依赖的各种服务： $controllerProvider, $provide ,$routeProvider
+-->
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
+    <script src="../js/angular.js"></script>
+</head>
+<body>
+<div ng-controller="ctrl">
+    <div>222,{{text}}</div>
+    <button ng-click="on(1)">早上</button>
+    <button ng-click="on(2)">上午</button>
+    <button ng-click="on(3)">下午</button>
+    <button ng-click="on(4)">晚上</button>
+</div>
+<script>
+    angular .module("app",[])
+            .config(["$provide",function($provide){
+                $provide.provider("o1",function(){   //自定义服务
+                    this.$get = function(){
+                        return {
+                            name : function(name){
+                                return name;
+                            }
+                        }
+                    }
+                });
+            }])
+            .config(["$provide",function($provide){
+                $provide.factory("o2",function(){
+                    return {
+                        val:function(name){
+                            return name;
+                        }
+                    };
+                });
+            }])
+            .config(["$provide",function($provide){
+                $provide.value("o3",function(name){
+                    return name;
+                });
+            }])
+            .config(["$provide",function($provide){
+                $provide.service("o4",function(){
+                    return {
+                        val:function(name){
+                            return name;
+                        }
+                    }
+                });
+            }])
+            .controller("ctrl",["$scope","o1","o2","o3","o4",function($scope,o1,o2,o3,o4){
+                $scope.text = "";
+                $scope.on = function(t){
+                   switch (t){
+                       case 1:
+                           $scope.text = o1.name("111111");break;
+                       case 2:
+                           $scope.text = o2.val("222222");break;
+                       case 3:
+                           $scope.text = o3("3333");break;
+                       case 4:
+                           $scope.text = o4.val("4444");break;
+                   }
+                }
+            }]);
+</script>
+</body>
+</html>
